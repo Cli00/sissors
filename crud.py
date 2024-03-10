@@ -1,9 +1,9 @@
-import hashlib
-import uuid
 from fastapi import APIRouter, HTTPException, status
-from schemas import URLbase, UserCreate, UserLogin
-from models import read_users, url, write_users
-from sqlalchemy.orm import Session
+from schemas import UserCreate, UserLogin
+from models import URL, read_users, write_users
+from database import SessionLocal
+import hashlib
+
 
 router = APIRouter()
 
@@ -42,19 +42,34 @@ async def login(user: UserLogin):
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
     )
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 @router.post("/shorten/")
 def shorten_url(long_url):
     hash_object = hashlib.sha256(long_url.encode())
-    hex_dig = hash_object.hexdigest()
-    short_url = hex_dig[:8] 
-    return {"shortened_url": f"domain.com/{short_url}"}
+    hex_dig = hash_object.hexdigest()[:8]
+    short_url = f"domain.com/{hex_dig}"
 
-# @router.get("/retrieve/{short_id}")
-# async def get_original_url(self, short_id: str, db: Session):
-#     # Retrieve URL object from session using the short ID
-#     url_data = db.query(URLSerializer).filter_by(id=short_id).first()
-#     if url_data:
-#         return {"original_url": url_data.original_url}
-#     else:
-#         raise HTTPException(status_code=404, detail="URL not found")
+    db = SessionLocal()
+    db_url = URL(original_url=long_url, shortened_url=short_url)
+    db.add(db_url)
+    db.commit()
+    db.refresh(db_url)
+    db.close()
+
+    return {"id": db_url.id, "original_url": db_url.original_url, "shortened_url": db_url.shortened_url}
+
+@router.get("/retrieve/{url_id}")
+def retrieve_url(url_id: str):
+    db = SessionLocal()
+    db_url = db.query(URL).filter(URL.id == url_id).first()
+    if db_url:
+        return {"original_url": db_url.original_url, "shortened_url": db_url.shortened_url}
+    raise HTTPException(status_code=404, detail="URL not found")
+
 

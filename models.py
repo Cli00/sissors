@@ -1,6 +1,9 @@
-from sqlalchemy import Column, String, Float
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String
+from database import Base, engine
+import uuid
 import csv
-from database import Base
+
 
 def read_users():
     with open("users.csv", mode='r') as file:
@@ -15,9 +18,12 @@ def write_users(users):
         writer.writerows(users)
 
 
-class url(Base):
-    __tablename__ = "urls"
+class URL(Base):
+    __tablename__ = "url"
 
-    id = Column(String, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     original_url = Column(String, nullable=False)
     shortened_url = Column(String, nullable=False)
+
+Base.metadata.create_all(bind=engine)
+
