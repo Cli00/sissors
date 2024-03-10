@@ -42,13 +42,6 @@ async def login(user: UserLogin):
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
     )
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 @router.post("/shorten/")
 def shorten_url(long_url):
     hash_object = hashlib.sha256(long_url.encode())
