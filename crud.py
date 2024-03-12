@@ -27,7 +27,7 @@ async def register(user: UserCreate):
 
 
 # login to user
-@router.post("/login/")
+@router.post("/login/<email>/<password>")
 async def login(user: UserLogin):
     users = read_users()
 
