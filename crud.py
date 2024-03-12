@@ -27,7 +27,7 @@ async def register(user: UserCreate):
 
 
 # login to user
-@router.post("/login/{user}")
+@router.post("/login")
 async def login(user: UserLogin):
     users = read_users()
 
@@ -43,7 +43,7 @@ async def login(user: UserLogin):
     )
 
 @router.post("/shorten/{long_url}")
-def shorten_url(long_url):
+def shorten_url(long_url: str):
     hash_object = hashlib.sha256(long_url.encode())
     hex_dig = hash_object.hexdigest()[:8]
     short_url = f"domain.com/{hex_dig}"
