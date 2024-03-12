@@ -27,7 +27,7 @@ async def register(user: UserCreate):
 
 
 # login to user
-@router.post("/login/<email>/<password>")
+@router.post("/login/{user}")
 async def login(user: UserLogin):
     users = read_users()
 
@@ -42,7 +42,7 @@ async def login(user: UserLogin):
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
     )
 
-@router.post("/shorten/")
+@router.post("/shorten/{long_url}")
 def shorten_url(long_url):
     hash_object = hashlib.sha256(long_url.encode())
     hex_dig = hash_object.hexdigest()[:8]
