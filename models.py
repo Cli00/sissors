@@ -1,27 +1,20 @@
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, String
 from database import Base, engine
-import uuid
-import csv
 
+class USER(Base):
+    __tablename__ = "users"
 
-def read_users():
-    with open("users.csv", mode='r') as file:
-        reader = csv.DictReader(file)
-        return [user for user in reader]
-
-def write_users(users):
-    with open("users.csv", mode='w', newline='') as file:
-        fieldnames = ['first_name', 'last_name', 'email', 'password']
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(users)
-
+    user_id = Column(String, primary_key=True, index=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    password = Column(String, nullable=False)
 
 class URL(Base):
     __tablename__ = "url"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, primary_key=True, index=True)
     original_url = Column(String, nullable=False)
     shortened_url = Column(String, nullable=False)
 
