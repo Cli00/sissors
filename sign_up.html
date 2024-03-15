@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="\index.css" rel="stylesheet">
+    <link href="\faq.css" rel="stylesheet">
+    <link href="\index.js" rel="javascript">
+    <title>User Registration</title>
+    <style>
+        /* Basic styling for the form */
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="./media/logo-blue.svg" alt="scissor logo" />
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="">My URLs</a>
+            </li>
+            <li class="nav-item">
+                <a href="">Features</a>
+                <button><img src="./media/chevron-down.svg" alt="scissor logo" /></button>
+            </li>
+            <li class="nav-item">
+                <a href="">Pricing</a>
+            </li>
+            <li class="nav-item">
+                <a href="">Analytics</a>
+            </li>
+            <li class="nav-item">
+                <a href="">FAQs</a>
+            </li>
+        </ul>
+        <div class="cta-buttons">
+            <a href="/">Log in</a>
+            <button class="btn-primary">Try for free</button>
+        </div>
+    </nav>
+    <h1>User Registration</h1>
+    <form id="registration-form" action="http://localhost:8000/register" method="POST">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

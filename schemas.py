@@ -22,3 +22,5 @@ class URLbase(BaseModel):
 class urlhistory(BaseModel):
     user_id: str
 
+class urlaccess(BaseModel):
+    shortened_url: str
