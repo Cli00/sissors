@@ -35,14 +35,19 @@ def register_user(
 ):
     user_in = usercreate(first_name=first_name, last_name=last_name, email=email, password=password)
     crud_service.register(db, user_in)
-    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login?message=registered_successfully")
+    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login")
 
-@app.post("/login")
-def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
-    user = crud_service.authenticate_user(db, credentials)
+@app.post("/login", response_class=HTMLResponse)
+def login_user(
+    email: EmailStr = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db),
+    ):
+    user = crud_service.authenticate_user(db, email, password)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    # Redirect to the dashboard after successful login
+    return RedirectResponse("/dashboard?message=login_successful&user_id={}&first_name={}&last_name={}".format(user.user_id, user.first_name, user.last_name))
 
 @app.post("/shorten")
 def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
