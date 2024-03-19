@@ -35,15 +35,10 @@ def register_user(
 ):
     user_in = usercreate(first_name=first_name, last_name=last_name, email=email, password=password)
     crud_service.register(db, user_in)
-    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login")
+    return RedirectResponse("http://delightful-fox-2ca07d.netlify.app/login")
 
-@app.post("/login", response_class=HTMLResponse)
-def login_user(
-    email: EmailStr = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db),
-    ):
-    credentials = UserLogin( email=email, password=password)
+@app.post("/login")
+def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
     user = crud_service.authenticate_user(db, credentials)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
