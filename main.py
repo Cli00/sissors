@@ -43,11 +43,11 @@ def login_user(
     password: str = Form(...),
     db: Session = Depends(get_db),
     ):
-    user = crud_service.authenticate_user(db, email, password)
+    user = UserLogin(email=email, password=password)
+    crud_service.authenticate_user(db, user)
     if user is None:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    # Redirect to the dashboard after successful login
-    return RedirectResponse("/dashboard?message=login_successful&user_id={}&first_name={}&last_name={}".format(user.user_id, user.first_name, user.last_name))
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
 
 @app.post("/shorten")
 def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
