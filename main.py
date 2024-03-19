@@ -35,7 +35,7 @@ def register_user(
 ):
     user_in = usercreate(first_name=first_name, last_name=last_name, email=email, password=password)
     crud_service.register(db, user_in)
-    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login")
+    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login?message=registered_successfully")
 
 @app.post("/login")
 def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
