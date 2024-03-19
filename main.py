@@ -43,8 +43,8 @@ def login_user(
     password: str = Form(...),
     db: Session = Depends(get_db),
     ):
-    user = UserLogin(email=email, password=password)
-    crud_service.authenticate_user(db, user)
+    credentials = UserLogin( email=email, password=password)
+    user = crud_service.authenticate_user(db, credentials)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
