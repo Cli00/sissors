@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form, HTTPException, Depends, status
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from pydantic import EmailStr
 from crud import crud_service
 from sqlalchemy.orm import Session
@@ -35,7 +35,7 @@ def register_user(
 ):
     user_in = usercreate(first_name=first_name, last_name=last_name, email=email, password=password)
     crud_service.register(db, user_in)
-    return {"message": "user successfully registered!"}
+    return RedirectResponse("https://delightful-fox-2ca07d.netlify.app/login")
 
 @app.post("/login")
 def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
