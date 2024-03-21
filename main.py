@@ -43,6 +43,15 @@ def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
     db_url= crud_service.shorten(db, url_in)
     return {"id": db_url.id, "short_url": db_url.shortened_url}
 
+@app.get("/redirect/{url_id}")
+def redirect_to_original_url(url_id: str, db: Session = Depends(get_db)):
+    url = crud_service.access_shortened_url(db, url_id)
+    
+    if url:
+        return {"original_url": url.original_url}
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="URL not found")
+
 @app.get("/history/{user_id}")
 def get_history(user_id: str, db: Session = Depends(get_db)):
     urls = crud_service.get_user_urls(db, user_id)
@@ -75,12 +84,5 @@ def delete_url(url_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="URL not found")
     return {"message": "URL deleted successfully"}
 
-@app.get("/redirect/{url_id}")
-def redirect_to_original_url(url_id: str, db: Session = Depends(get_db)):
-    url = crud_service.access_shortened_url(db, url_id)
-    
-    if url:
-        return {"original_url": url.original_url}
-    else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="URL not found")
+
     
