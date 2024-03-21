@@ -5,7 +5,7 @@ from pydantic import EmailStr
 from crud import crud_service
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from schemas import usercreate, UserLogin, URLbase
+from schemas import User, usercreate, UserLogin, URLbase
 from fastapi.templating import Jinja2Templates
 
 
@@ -27,15 +27,8 @@ def home():
     return "Hello Server"
 
 @app.post("/register", response_class=HTMLResponse)
-def register_user(
-    first_name: str = Form(...),
-    last_name: str = Form(...),
-    email: EmailStr = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db),
-):
-    user_in = usercreate(first_name=first_name, last_name=last_name, email=email, password=password)
-    crud_service.register(db, user_in)
+def register_user(user_in: usercreate, db: Session = Depends(get_db)):
+    user = crud_service.register(db, user_in)
     return redirect("http://delightful-fox-2ca07d.netlify.app/login")
 
 @app.post("/login")
