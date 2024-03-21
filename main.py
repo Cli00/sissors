@@ -29,7 +29,7 @@ def home():
 @app.post("/register", response_class=HTMLResponse)
 def register_user(user_in: usercreate, db: Session = Depends(get_db)):
     user = crud_service.register(db, user_in)
-    return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
+    return {"message": "regisered successfully"}
 
 @app.post("/login")
 def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
