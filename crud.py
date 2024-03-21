@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from schemas import usercreate, UserLogin, URLbase, urlhistory, urlaccess
+from schemas import usercreate, UserLogin, URLbase, urlhistory
 from models import URL, USER
 from sqlalchemy import func
 from sqlalchemy.orm import Session

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, func, LargeBinary
+from sqlalchemy import Column, String, Integer, DateTime, func
 from database import Base, engine
 
 class USER(Base):

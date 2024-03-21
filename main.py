@@ -1,11 +1,9 @@
-from fastapi import FastAPI, Form, HTTPException, Depends, status
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
-from flask import redirect
-from pydantic import EmailStr
+from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.responses import FileResponse
 from crud import crud_service
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from schemas import User, usercreate, UserLogin, URLbase
+from schemas import usercreate, UserLogin, URLbase
 from fastapi.templating import Jinja2Templates
 
 
@@ -27,12 +25,12 @@ def home():
     return "Hello Server"
 
 @app.post("/register")
-def register_user(user_in: usercreate, db: Session = Depends(get_db)):
+def register(user_in: usercreate, db: Session = Depends(get_db)):
     user = crud_service.register(db, user_in)
     return {"message": "regisered successfully"}
 
 @app.post("/login")
-def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
+def login(credentials: UserLogin, db: Session = Depends(get_db)):
     user = crud_service.authenticate_user(db, credentials)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
@@ -44,7 +42,7 @@ def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
     return {"id": db_url.id, "short_url": db_url.shortened_url}
 
 @app.get("/redirect/{url_id}")
-def redirect_to_original_url(url_id: str, db: Session = Depends(get_db)):
+def visit_original_url(url_id: str, db: Session = Depends(get_db)):
     url = crud_service.access_shortened_url(db, url_id)
     
     if url:
@@ -59,16 +57,16 @@ def get_history(user_id: str, db: Session = Depends(get_db)):
 
 
 @app.get("/analytics/id/{url_id}")
-def get_url_analytics_by_id(url_id: str, db: Session = Depends(get_db)):
+def get_url_analytics_by_user_id(url_id: str, db: Session = Depends(get_db)):
     analytics_data = crud_service.get_url_analytics_by_id(db, url_id)
     if analytics_data is None:
         raise HTTPException(status_code=404, detail="URL not found")
     return analytics_data
 
 @app.get("/qr_code/{url_id}")
-def get_qr_code(url_id: str, db: Session = Depends(get_db)):
-    url = crud_service.get_url(db, url_id)  # Call get_url method from CRUDService
-    
+def get_your_url_qr_code(url_id: str, db: Session = Depends(get_db)):
+    url = crud_service.get_url(db, url_id)
+
     if url:
         if url.qr_code_path:
             return FileResponse(url.qr_code_path)
