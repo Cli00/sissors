@@ -26,10 +26,10 @@ def get_db():
 def home():
     return "Hello Server"
 
-@app.post("/register", response_class=HTMLResponse)
+@app.post("/register")
 def register_user(user_in: usercreate, db: Session = Depends(get_db)):
     user = crud_service.register(db, user_in)
-    return {"message": "regisered successfully"}
+    return {"message": "regisered successfully", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
 
 @app.post("/login")
 def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
