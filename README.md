@@ -6,7 +6,10 @@ This FastAPI project provides a registration and login system using SQLAlchemy f
 ## Features
 - User registration with email validation
 - User authentication and login
-- Redirects to the dashboard after successful login or registration
+- URL Shortening: Scissor allow users to shorten URLs by pasting a long URL into the Scissor platform and a shorter URL gets automatically generated.
+- QR Code Generation: Scissor allows users to also generate QR codes for the shortened URLs. Users can download the QR code image and use it in their promotional materials or/and on their website.
+- Analytics: Scissor provides basic analytics that allows users to track their shortened URL’s performance. Users can see how many clicks their shortened URL has received.
+– Link History: Scissor allows users to see the history of links they’ve created so they can easily find and reuse links they have previously created
 
 ## Setup
 1. Install dependencies using `pip install -r requirements.txt`
