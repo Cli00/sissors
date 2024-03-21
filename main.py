@@ -7,11 +7,9 @@ from schemas import usercreate, UserLogin, URLbase
 from fastapi.templating import Jinja2Templates
 
 
-
-# Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
 
 def get_db():
     db = SessionLocal()
@@ -19,6 +17,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
 
 @app.get("/")
 def home():
