@@ -39,7 +39,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 @app.post("/shorten")
 def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
     db_url= crud_service.shorten(db, url_in)
-    return {"id": db_url.id, "short_url": db_url.shortened_url}
+    return {"url_id": db_url.id, "short_url": db_url.shortened_url}
 
 @app.get("/redirect/{url_id}")
 def visit_original_url(url_id: str, db: Session = Depends(get_db)):
