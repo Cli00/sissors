@@ -29,14 +29,14 @@ def home():
 @app.post("/register", response_class=HTMLResponse)
 def register_user(user_in: usercreate, db: Session = Depends(get_db)):
     user = crud_service.register(db, user_in)
-    return redirect("http://delightful-fox-2ca07d.netlify.app/login")
+    return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
 
 @app.post("/login")
 def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
     user = crud_service.authenticate_user(db, credentials)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    return {"message": "Login successful", "user_id": user.user_id, "first_name": user.first_name, "last_name": user.last_name}
+    return {"message": "Login successful", "first_name": user.first_name}
 
 @app.post("/shorten")
 def shorten_url(url_in:URLbase, db: Session = Depends(get_db)):
